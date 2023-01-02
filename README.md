@@ -16,8 +16,8 @@ This repository contains code to train a Resnet34-backbone-based UNET model for 
 │       └── valid
 
 
-└── source                      # SOURCE CODE
-|   ├── data.py                     # Data Loaders  
+├──  source                      # SOURCE CODE
+|    ├── data.py                    # Data Loaders  
 |    ├── loss.py                    # Loss and Metric Functions
 |    ├── model.py                   # Model
 |    └── train.py                   # Training Loop
@@ -29,17 +29,27 @@ This repository contains code to train a Resnet34-backbone-based UNET model for 
 │   ├── 03-model.ipynb               # Model Training
 │   ├── 04-evaluate.ipynb            # Model Evaluation
 
+└── app.py                       # GRADIO APP
+
 ```
 
-The input data files and trained models are saved as [Kaggle Dataset.](https://www.kaggle.com/datasets/brightertiger/bdd-lane-detection)
+The input data files and trained models are saved as [Kaggle Dataset.](https://www.kaggle.com/datasets/brightertiger/bdd-lane-detection). They may be downloaded and placed in the 'data' folder in this repository for reproducing the results.
 
 ### Solution Approach
 
 The solution involves training a UNET based segmentation model relying on a Resnet-34 backbone. DICE + BCE is used a sloss functions and evaluation is done using IoU metric. The final model performance and metrics can be seen below. 
 
-![](/images/performance.png)
+![](/docs/performance.png)
 
 The output from scoring the model looks as follows:
 
-![](/images/output.png)
+![](/docs/output.png)
+
+The detailed PDF report is available [here]().
+
+### Serving
+
+The model can be served via Gradio interface. The code for the same is in app.py file. Below is the screenshot of the demo. 
+
+![](/docs/app.png)
 
