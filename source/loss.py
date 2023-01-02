@@ -32,7 +32,7 @@ class Metric(nn.Module):
         output = 1/(1 + np.exp(-output))
         output = output.reshape(-1,)
         label = label.reshape(-1,)
-        output = (output > 0.3)
+        output = (output > 0.5)
         label = (label > 0.0)
         intersection = (output * label).sum() 
         union = (output | label).sum()
