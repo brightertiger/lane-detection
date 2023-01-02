@@ -1,5 +1,6 @@
 import torch
 import torch.nn as nn
+import numpy as np
 import torch.nn.functional as F
 
 class Loss(nn.Module):
@@ -10,7 +11,7 @@ class Loss(nn.Module):
         return None
 
     def forward(self, output, label):
-        output = F.sigmoid(output)       
+        output = torch.sigmoid(output)       
         output = output.view(-1)
         label = label.view(-1)
         intersection = (output * label).sum()                            
@@ -28,9 +29,9 @@ class Metric(nn.Module):
         return None
 
     def forward(self, output, label):
-        output = F.sigmoid(output)       
-        output = output.view(-1)
-        label = label.view(-1)
+        output = 1/(1 + np.exp(-output))     
+        output = output.reshape(-1,)
+        label = label.reshape(-1,)
         intersection = (output * label).sum()                            
         dice = (2. * intersection + self.smooth) / (output.sum() + label.sum() + self.smooth)
         return dice

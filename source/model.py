@@ -17,5 +17,6 @@ class Model(nn.Module):
     
     def forward(self, image):
         output = self.model(image)
+        output = output.squeeze()
         return output
 

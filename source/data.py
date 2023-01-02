@@ -4,9 +4,8 @@ import math
 import cv2
 import numpy as np
 import pandas as pd
-from torch.utils.data import Dataset, DataLoader
 import albumentations as A
-from albumentations.pytorch import ToTensor
+from torch.utils.data import Dataset, DataLoader
 from torchvision import transforms
 
 class TrainDataset(Dataset):
@@ -29,8 +28,6 @@ class TrainDataset(Dataset):
     def __image__(self, index):  
         image = self.path + '/images/train/' + self.image[index]
         label = self.path + '/labels/train/' + self.label[index]
-        print(image)
-        print(label)
         image = cv2.imread(image)
         label = cv2.imread(label)
         image = cv2.cvtColor(image, cv2.COLOR_BGR2RGB)
