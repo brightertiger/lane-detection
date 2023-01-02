@@ -29,10 +29,13 @@ class Metric(nn.Module):
         return None
 
     def forward(self, output, label):
-        output = 1/(1 + np.exp(-output))     
+        output = 1/(1 + np.exp(-output))
         output = output.reshape(-1,)
         label = label.reshape(-1,)
-        intersection = (output * label).sum()                            
-        dice = (2. * intersection + self.smooth) / (output.sum() + label.sum() + self.smooth)
-        return dice
-
+        output = (output > 0.3)
+        label = (label > 0.0)
+        intersection = (output * label).sum() 
+        union = (output | label).sum()
+        iou = (intersection + self.smooth) / (union + self.smooth)
+        return iou
+ 
