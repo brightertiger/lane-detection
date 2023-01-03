@@ -49,7 +49,7 @@ The detailed PDF report is available [here](report.pdf).
 
 ### Serving
 
-The model can be served via Gradio interface. The code for the same is in app.py file. Below is the screenshot of the demo. 
+The model can be served via Gradio interface. The code for the same is in app.py file. Below is the screenshot of the demo. Its hosted on [Huggingface Spaces](https://huggingface.co/spaces/brightertiger/bdd-lane-detection)
 
 ![](/docs/app.png)
 
