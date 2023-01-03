@@ -37,7 +37,7 @@ The input data files and trained models are saved as [Kaggle Dataset.](https://w
 
 ### Solution Approach
 
-The solution involves training a UNET based segmentation model relying on a Resnet-34 backbone. DICE + BCE is used a sloss functions and evaluation is done using IoU metric. The final model performance and metrics can be seen below. 
+The solution involves training a UNET based segmentation model relying on a Resnet-34 backbone. DICE + BCE is used as loss function and evaluation is done using IoU metric. The final model performance and metrics can be seen below. 
 
 ![](/docs/performance.png)
 
@@ -45,7 +45,7 @@ The output from scoring the model looks as follows:
 
 ![](/docs/output.png)
 
-The detailed PDF report is available [here]().
+The detailed PDF report is available [here](report.pdf).
 
 ### Serving
 
