@@ -33,7 +33,13 @@ This repository contains code to train a Resnet34-backbone-based UNET model for 
 
 ```
 
-The input data files and trained models are saved as [Kaggle Dataset.](https://www.kaggle.com/datasets/brightertiger/bdd-lane-detection). They may be downloaded and placed in the 'data' folder in this repository for reproducing the results.
+- The input data files and trained models are saved as [Kaggle Dataset.](https://www.kaggle.com/datasets/brightertiger/bdd-lane-detection). They may be downloaded and placed in the 'data' folder in this repository for reproducing the results.
+- The python files in source folder contains the implementations of model, loss, training loop, data loaders etc. 
+- Jupyter notebooks call the classes and functions implemented in source files for execution
+  - 01-data.ipynb: Contains information on datasets, image sizes and labels
+  - 02-transform.ipynb: Experimentations with augmentations like RandomCrop and Horizontal Flips
+  - 03-model.ipynb: Trains the UNet Model
+  - 04-evaluate.ipynb: Evaluated the model performance on random images from validation set 
 
 ### Solution Approach
 
