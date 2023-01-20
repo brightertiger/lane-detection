@@ -39,12 +39,12 @@ This repository contains code to train a Resnet34-backbone-based UNET model for 
 
 - Jupyter notebooks call the classes and functions implemented in source files for execution
 
-|Notebook|Description|
-|--------|-----------|
-|01-data.ipynb| Contains information on datasets, image sizes and labels|
-|02-transform.ipynb| Experimentations with augmentations like RandomCrop and Horizontal Flips|
-|03-model.ipynb| Trains the UNet Model|
-|04-evaluate.ipynb| Evaluated the model performance on random images from validation set|
+|Notebook|Description|Link|
+|--------|-----------|-----|
+|01-data.ipynb| Contains information on datasets, image sizes and labels|:link:|
+|02-transform.ipynb| Experimentations with augmentations like RandomCrop and Horizontal Flips|:link:|
+|03-model.ipynb| Trains the UNet Model|:link:|
+|04-evaluate.ipynb| Evaluated the model performance on random images from validation set|:link:|
 
 ### Solution Approach
 
