@@ -2,42 +2,75 @@
 
 ### Overview
 
-This repository contains code to train a Resnet34-backbone-based UNET model for detecting lanes using a small sample (~3k images) from [BDD-Lane-Detection](https://www.bdd100k.com) dataset.
+This repository contains code to train a Resnet34-backbone-based U-Net model for detecting lanes using a small sample (~3k images) from [BDD-Lane-Detection](https://www.bdd100k.com) dataset. The codebase has been refactored and improved for better maintainability, performance, and extensibility.
 
 ### Code Structure
 
 ```
-├── data                         # DATA
-│   ├── images                       # Sample downloaded from BDD-100k
+├── config.yaml               # Configuration file for all parameters
+├── main.py                   # Command-line interface
+├── app.py                    # Gradio web interface
+├── requirements.txt          # Python dependencies
+├── data                      # DATA
+│   ├── images                    # Sample downloaded from BDD-100k
 │   │   ├── train
 │   │   └── valid
-│   └── labels                       # Masks corresponding to Images 
-│       ├── train
-│       └── valid
+│   ├── labels                    # Masks corresponding to Images 
+│   │   ├── train
+│   │   └── valid
+│   ├── train.csv                 # Training split
+│   ├── valid.csv                 # Validation split
+│   └── model.pt                  # Pretrained model checkpoint
 
+├── src                       # SOURCE CODE
+│   ├── data.py                  # Data loaders with improved dataset classes
+│   ├── loss.py                  # Loss and metric functions (DiceBCE and IoU)
+│   ├── model.py                 # Improved model with class methods
+│   ├── train.py                 # Enhanced training pipeline
+│   ├── pipeline.py              # End-to-end pipeline for training and inference
+│   └── config.py                # Configuration utilities
 
-├──  source                      # SOURCE CODE
-|    ├── data.py                    # Data Loaders  
-|    ├── loss.py                    # Loss and Metric Functions
-|    ├── model.py                   # Model
-|    └── train.py                   # Training Loop
+├── notebooks                 # JUPYTER NOTEBOOKS
+│   ├── 01-data.ipynb             # Data Preprocessing
+│   ├── 02-transform.ipynb        # Data Augmentation
+│   ├── 03-model.ipynb            # Model Training
+│   ├── 04-evaluate.ipynb         # Model Evaluation
 
-
-├── notebooks                    # JUPYTER NOTEBOOKS
-│   ├── 01-data.ipynb                # Data Preprocessing
-│   ├── 02-transform.ipynb           # Data Augmentation
-│   ├── 03-model.ipynb               # Model Training
-│   ├── 04-evaluate.ipynb            # Model Evaluation
-
-└── app.py                       # GRADIO APP
-
+├── checkpoints               # Saved model checkpoints
+├── logs                      # Training logs
+└── predictions               # Saved prediction results
 ```
 
-- The input data files and trained models are saved as [Kaggle Dataset.](https://www.kaggle.com/datasets/brightertiger/bdd-lane-detection). They may be downloaded and placed in the 'data' folder in this repository for reproducing the results.
+- The input data files and trained models are saved as [Kaggle Dataset](https://www.kaggle.com/datasets/brightertiger/bdd-lane-detection). They may be downloaded and placed in the 'data' folder in this repository for reproducing the results.
 
-- The python files in source folder contains the implementations of model, loss, training loop, data loaders etc. 
+- The python files in the `src` folder (renamed from 'source') contain the implementations of the model, loss, training loop, data loaders, etc., now with improved type hints, documentation, and error handling.
 
-- Jupyter notebooks call the classes and functions implemented in source files for execution
+- Jupyter notebooks call the classes and functions implemented in the source files for execution.
+
+### New Features
+
+#### Configuration Management
+- YAML-based configuration (`config.yaml`) for easy parameter management
+- Organized into data, model, training, augmentation, and inference sections
+
+#### Pipeline Architecture
+- End-to-end pipeline for training, evaluation, and inference
+- Modular components for better code organization
+- Automatic data splitting if predefined splits aren't available
+
+#### Improved Training
+- Better checkpointing with optimizer state
+- Early stopping to prevent overfitting
+- Proper learning rate scheduling
+- Enhanced logging and progress tracking
+
+#### Advanced Visualization
+- Tools for visualizing predictions and training history
+- Overlay visualization of segmentation masks
+
+#### Command-line Interface
+- Train, evaluate, and perform inference from the command line
+- Flexible arguments for different workflows
 
 |Notebook|Description|Link|
 |--------|-----------|-----|
@@ -48,7 +81,7 @@ This repository contains code to train a Resnet34-backbone-based UNET model for 
 
 ### Solution Approach
 
-The solution involves training a UNET based segmentation model relying on a Resnet-34 backbone. DICE + BCE is used as loss function and evaluation is done using IoU metric. The final model performance and metrics can be seen below. 
+The solution involves training a U-Net based segmentation model relying on a ResNet-34 backbone. DICE + BCE is used as loss function and evaluation is done using IoU metric. The final model performance and metrics can be seen below. 
 
 ![](/docs/performance.png)
 
@@ -58,9 +91,95 @@ The output from scoring the model looks as follows:
 
 The detailed PDF report is available [here](report.pdf).
 
+### Usage
+
+#### Configuration
+
+The project now uses a YAML configuration file (`config.yaml`) for managing parameters:
+
+```yaml
+# Example configuration
+data:
+  path: "./data"
+  img_size: 720
+  batch_size: 8
+
+model:
+  encoder_name: "resnet34"
+  encoder_weights: "imagenet"
+
+training:
+  epochs: 50
+  learning_rate: 0.0001
+```
+
+#### Training
+
+Train the model using the command-line interface:
+
+```bash
+python main.py --mode train --config config.yaml
+```
+
+To resume training from a checkpoint:
+
+```bash
+python main.py --mode train --config config.yaml --resume checkpoints/model.pt
+```
+
+#### Evaluation
+
+Evaluate model performance on the validation set:
+
+```bash
+python main.py --mode evaluate --config config.yaml --checkpoint checkpoints/model.pt
+```
+
+#### Prediction
+
+Make predictions on a single image:
+
+```bash
+python main.py --mode predict --config config.yaml --input test_image.jpg --output predictions/
+```
+
+Process a directory of images:
+
+```bash
+python main.py --mode predict --config config.yaml --input test_images/ --output predictions/
+```
+
 ### Serving
 
-The model can be served via Gradio interface. The code for the same is in app.py file. Below is the screenshot of the demo. Its hosted on [Huggingface Spaces](https://huggingface.co/spaces/brightertiger/bdd-lane-detection)
+#### Web Interface
+
+The model can be served via Gradio interface. The code for the same is in `app.py` file. Below is the screenshot of the demo. It's hosted on [Huggingface Spaces](https://huggingface.co/spaces/brightertiger/bdd-lane-detection).
+
+```bash
+python app.py
+```
 
 ![](/docs/app.png)
+
+The improved Gradio interface now provides three outputs:
+1. Original image
+2. Lane mask (green overlay)
+3. Combined visualization
+
+### Requirements
+
+Major dependencies include:
+
+- torch
+- torchvision
+- numpy
+- pandas
+- opencv-python
+- albumentations
+- segmentation-models-pytorch
+- gradio
+- matplotlib
+- PyYAML
+
+See `requirements.txt` for the complete list with version specifications.
 

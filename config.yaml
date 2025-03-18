@@ -1,0 +1,48 @@
+# Configuration file for lane detection segmentation model
+
+# Data configuration
+data:
+  path: "./data"
+  img_size: 720
+  pad_size: 736
+  batch_size: 8
+  num_workers: 4
+  val_split: 0.2  # Validation split ratio if not using predefined splits
+
+# Model configuration
+model:
+  encoder_name: "resnet34"
+  encoder_weights: "imagenet"
+  in_channels: 3
+  classes: 1
+  activation: null  # Use null for identity
+
+# Training configuration
+training:
+  epochs: 50
+  learning_rate: 0.0001
+  weight_decay: 0.0001
+  patience: 10
+  device: "cuda"
+  checkpoint_dir: "./checkpoints"
+  log_dir: "./logs"
+  mixed_precision: true
+  save_best_only: true
+  monitor: "val_loss"  # Options: val_loss, val_metric
+
+# Augmentation configuration
+augmentation:
+  horizontal_flip_prob: 0.5
+  vertical_flip_prob: 0.0
+  rotate_prob: 0.3
+  rotate_limit: 10
+  brightness_contrast_prob: 0.3
+  hue_saturation_prob: 0.2
+
+# Inference configuration
+inference:
+  threshold: 0.5
+  overlay_alpha: 0.5
+  overlay_color: [0, 255, 0]  # Green
+  batch_size: 1
+  save_dir: "./predictions" 
