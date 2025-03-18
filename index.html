@@ -1,0 +1,426 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>BDD Lane Detection</title>
+    <style>
+        :root {
+            --primary-color: #333;
+            --secondary-color: #555;
+            --accent-color: #2563eb;
+            --background-color: #fff;
+            --code-background: #f5f5f5;
+            --border-color: #eaeaea;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+            line-height: 1.6;
+            color: var(--primary-color);
+            background-color: var(--background-color);
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 2rem 1rem;
+        }
+
+        header {
+            margin-bottom: 2.5rem;
+            border-bottom: 1px solid var(--border-color);
+            padding-bottom: 1rem;
+        }
+
+        h1 {
+            font-size: 2.25rem;
+            margin-bottom: 0.5rem;
+        }
+
+        h2 {
+            font-size: 1.75rem;
+            margin: 2rem 0 1rem;
+            color: var(--primary-color);
+        }
+
+        h3 {
+            font-size: 1.25rem;
+            margin: 1.5rem 0 0.75rem;
+            color: var(--secondary-color);
+        }
+
+        p,
+        ul,
+        ol {
+            margin-bottom: 1.25rem;
+        }
+
+        ul,
+        ol {
+            padding-left: 1.5rem;
+        }
+
+        a {
+            color: var(--accent-color);
+            text-decoration: none;
+        }
+
+        a:hover {
+            text-decoration: underline;
+        }
+
+        code {
+            font-family: SFMono-Regular, Consolas, "Liberation Mono", Menlo, monospace;
+            background-color: var(--code-background);
+            padding: 0.2rem 0.4rem;
+            border-radius: 3px;
+            font-size: 0.9em;
+        }
+
+        pre {
+            background-color: var(--code-background);
+            padding: 1rem;
+            border-radius: 5px;
+            overflow-x: auto;
+            margin-bottom: 1.25rem;
+        }
+
+        pre code {
+            padding: 0;
+            background-color: transparent;
+        }
+
+        img {
+            max-width: 100%;
+            height: auto;
+            border-radius: 5px;
+            margin: 1.5rem 0;
+            border: 1px solid var(--border-color);
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-bottom: 1.25rem;
+        }
+
+        table th,
+        table td {
+            border: 1px solid var(--border-color);
+            padding: 0.5rem;
+            text-align: left;
+        }
+
+        table th {
+            background-color: var(--code-background);
+        }
+
+        .file-structure {
+            font-family: monospace;
+            white-space: pre;
+            background-color: var(--code-background);
+            padding: 1rem;
+            border-radius: 5px;
+            overflow-x: auto;
+        }
+
+        .feature-box {
+            margin-bottom: 1.5rem;
+            padding: 1rem;
+            border: 1px solid var(--border-color);
+            border-radius: 5px;
+        }
+
+        .feature-box h3 {
+            margin-top: 0;
+        }
+
+        footer {
+            margin-top: 3rem;
+            padding-top: 1rem;
+            border-top: 1px solid var(--border-color);
+            color: var(--secondary-color);
+            font-size: 0.9rem;
+        }
+    </style>
+</head>
+
+<body>
+    <header>
+        <h1>BDD Lane Detection</h1>
+        <p><a href="https://github.com/brightertiger/lane-detection">View on GitHub</a></p>
+    </header>
+
+    <main>
+        <section id="overview">
+            <h2>Overview</h2>
+            <p>
+                This repository contains code to train a ResNet34-backbone-based U-Net model for detecting lanes
+                using a small sample (~3k images) from <a href="https://www.bdd100k.com"
+                    target="_blank">BDD-Lane-Detection</a> dataset.
+                The codebase has been refactored and improved for better maintainability, performance, and
+                extensibility.
+            </p>
+        </section>
+
+        <section id="code-structure">
+            <h2>Code Structure</h2>
+            <div class="file-structure">
+                ├── <a href="https://github.com/brightertiger/lane-detection/blob/main/config.yaml">config.yaml</a> #
+                Configuration file for all parameters
+                ├── <a href="https://github.com/brightertiger/lane-detection/blob/main/main.py">main.py</a> #
+                Command-line interface
+                ├── <a href="https://github.com/brightertiger/lane-detection/blob/main/app.py">app.py</a> # Gradio
+                web interface
+                ├── <a
+                    href="https://github.com/brightertiger/lane-detection/blob/main/requirements.txt">requirements.txt</a>
+                # Python dependencies
+                ├── data # DATA
+                │ ├── images # Sample downloaded from BDD-100k
+                │ │ ├── train
+                │ │ └── valid
+                │ ├── labels # Masks corresponding to Images
+                │ │ ├── train
+                │ │ └── valid
+                │ ├── train.csv # Training split
+                │ ├── valid.csv # Validation split
+                │ └── model.pt # Pretrained model checkpoint
+                │
+                ├── src # SOURCE CODE
+                │ ├── <a href="https://github.com/brightertiger/lane-detection/blob/main/src/data.py">data.py</a> #
+                Data loaders with improved dataset classes
+                │ ├── <a href="https://github.com/brightertiger/lane-detection/blob/main/src/loss.py">loss.py</a> #
+                Loss and metric functions (DiceBCE and IoU)
+                │ ├── <a href="https://github.com/brightertiger/lane-detection/blob/main/src/model.py">model.py</a> #
+                Improved model with class methods
+                │ ├── <a href="https://github.com/brightertiger/lane-detection/blob/main/src/train.py">train.py</a> #
+                Enhanced training pipeline
+                │ ├── <a
+                    href="https://github.com/brightertiger/lane-detection/blob/main/src/pipeline.py">pipeline.py</a> #
+                End-to-end pipeline for training and inference
+                │ └── <a href="https://github.com/brightertiger/lane-detection/blob/main/src/config.py">config.py</a> #
+                Configuration utilities
+                │
+                ├── notebooks # JUPYTER NOTEBOOKS
+                │ ├── 01-data.ipynb # Data Preprocessing
+                │ ├── 02-transform.ipynb # Data Augmentation
+                │ ├── 03-model.ipynb # Model Training
+                │ └── 04-evaluate.ipynb # Model Evaluation
+                │
+                ├── checkpoints # Saved model checkpoints
+                ├── logs # Training logs
+                └── predictions # Saved prediction results
+            </div>
+
+            <ul>
+                <li>The input data files and trained models are saved as <a
+                        href="https://www.kaggle.com/datasets/brightertiger/bdd-lane-detection" target="_blank">Kaggle
+                        Dataset</a>. They may be downloaded and placed in the 'data' folder for
+                    reproducing the results.</li>
+                <li>The Python files in the <code>src</code> folder contain the implementations of the model, loss,
+                    training loop, data loaders, etc., now with improved type hints, documentation, and error handling.
+                </li>
+                <li>Jupyter notebooks call the classes and functions implemented in the source files for execution.</li>
+            </ul>
+        </section>
+
+        <section id="features">
+            <h2>New Features</h2>
+
+            <div class="feature-box">
+                <h3>Configuration Management</h3>
+                <ul>
+                    <li>YAML-based configuration (<code>config.yaml</code>) for easy parameter management</li>
+                    <li>Organized into data, model, training, augmentation, and inference sections</li>
+                </ul>
+            </div>
+
+            <div class="feature-box">
+                <h3>Pipeline Architecture</h3>
+                <ul>
+                    <li>End-to-end pipeline for training, evaluation, and inference</li>
+                    <li>Modular components for better code organization</li>
+                    <li>Automatic data splitting if predefined splits aren't available</li>
+                </ul>
+            </div>
+
+            <div class="feature-box">
+                <h3>Improved Training</h3>
+                <ul>
+                    <li>Better checkpointing with optimizer state</li>
+                    <li>Early stopping to prevent overfitting</li>
+                    <li>Proper learning rate scheduling</li>
+                    <li>Enhanced logging and progress tracking</li>
+                </ul>
+            </div>
+
+            <div class="feature-box">
+                <h3>Advanced Visualization</h3>
+                <ul>
+                    <li>Tools for visualizing predictions and training history</li>
+                    <li>Overlay visualization of segmentation masks</li>
+                </ul>
+            </div>
+
+            <div class="feature-box">
+                <h3>Command-line Interface</h3>
+                <ul>
+                    <li>Train, evaluate, and perform inference from the command line</li>
+                    <li>Flexible arguments for different workflows</li>
+                </ul>
+            </div>
+        </section>
+
+        <section id="notebooks">
+            <h2>Notebooks</h2>
+            <table>
+                <thead>
+                    <tr>
+                        <th>Notebook</th>
+                        <th>Description</th>
+                        <th>Link</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>01-data.ipynb</td>
+                        <td>Contains information on datasets, image sizes and labels</td>
+                        <td><a
+                                href="https://github.com/brightertiger/lane-detection/blob/main/notebooks/01-data.ipynb">Link</a>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>02-transform.ipynb</td>
+                        <td>Experimentations with augmentations like RandomCrop and Horizontal Flips</td>
+                        <td><a
+                                href="https://github.com/brightertiger/lane-detection/blob/main/notebooks/02-transform.ipynb">Link</a>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>03-model.ipynb</td>
+                        <td>Trains the UNet Model</td>
+                        <td><a
+                                href="https://github.com/brightertiger/lane-detection/blob/main/notebooks/03-model.ipynb">Link</a>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>04-evaluate.ipynb</td>
+                        <td>Evaluated the model performance on random images from validation set</td>
+                        <td><a
+                                href="https://github.com/brightertiger/lane-detection/blob/main/notebooks/04-evaluate.ipynb">Link</a>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </section>
+
+        <section id="solution">
+            <h2>Solution Approach</h2>
+            <p>
+                The solution involves training a U-Net based segmentation model relying on a ResNet-34 backbone.
+                DICE + BCE is used as loss function and evaluation is done using IoU metric.
+                The final model performance and metrics can be seen below:
+            </p>
+            <img src="docs/performance.png" alt="Model Performance Metrics">
+
+            <p>The output from scoring the model looks as follows:</p>
+            <img src="docs/output.png" alt="Model Output Example">
+
+            <p>The detailed PDF report is available <a href="report.pdf">here</a>.</p>
+        </section>
+
+        <section id="usage">
+            <h2>Usage</h2>
+
+            <h3>Configuration</h3>
+            <p>
+                The project now uses a YAML configuration file (<code>config.yaml</code>) for managing parameters:
+            </p>
+            <pre><code># Example configuration
+data:
+  path: "./data"
+  img_size: 720
+  batch_size: 8
+
+model:
+  encoder_name: "resnet34"
+  encoder_weights: "imagenet"
+
+training:
+  epochs: 50
+  learning_rate: 0.0001</code></pre>
+
+            <h3>Training</h3>
+            <p>Train the model using the command-line interface:</p>
+            <pre><code>python main.py --mode train --config config.yaml</code></pre>
+
+            <p>To resume training from a checkpoint:</p>
+            <pre><code>python main.py --mode train --config config.yaml --resume checkpoints/model.pt</code></pre>
+
+            <h3>Evaluation</h3>
+            <p>Evaluate model performance on the validation set:</p>
+            <pre><code>python main.py --mode evaluate --config config.yaml --checkpoint checkpoints/model.pt</code></pre>
+
+            <h3>Prediction</h3>
+            <p>Make predictions on a single image:</p>
+            <pre><code>python main.py --mode predict --config config.yaml --input test_image.jpg --output predictions/</code></pre>
+
+            <p>Process a directory of images:</p>
+            <pre><code>python main.py --mode predict --config config.yaml --input test_images/ --output predictions/</code></pre>
+        </section>
+
+        <section id="serving">
+            <h2>Serving</h2>
+
+            <h3>Web Interface</h3>
+            <p>
+                The model can be served via Gradio interface. The code for the same is in <code>app.py</code> file.
+                Below is the screenshot of the demo. It's hosted on
+                <a href="https://huggingface.co/spaces/brightertiger/bdd-lane-detection" target="_blank">Huggingface
+                    Spaces</a>.
+            </p>
+            <pre><code>python app.py</code></pre>
+
+            <img src="docs/app.png" alt="Gradio App Interface">
+
+            <p>The improved Gradio interface now provides three outputs:</p>
+            <ol>
+                <li>Original image</li>
+                <li>Lane mask (green overlay)</li>
+                <li>Combined visualization</li>
+            </ol>
+        </section>
+
+        <section id="requirements">
+            <h2>Requirements</h2>
+            <p>Major dependencies include:</p>
+            <ul>
+                <li>torch</li>
+                <li>torchvision</li>
+                <li>numpy</li>
+                <li>pandas</li>
+                <li>opencv-python</li>
+                <li>albumentations</li>
+                <li>segmentation-models-pytorch</li>
+                <li>gradio</li>
+                <li>matplotlib</li>
+                <li>PyYAML</li>
+            </ul>
+            <p>See <a
+                    href="https://github.com/brightertiger/lane-detection/blob/main/requirements.txt">requirements.txt</a>
+                for the complete list with version specifications.</p>
+        </section>
+    </main>
+
+    <footer>
+        <p>BDD Lane Detection Project &copy; 2023 | <a href="https://github.com/brightertiger/lane-detection">GitHub
+                Repository</a></p>
+    </footer>
+</body>
+
+</html>
