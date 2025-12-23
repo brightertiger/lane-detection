@@ -169,7 +169,7 @@ def main():
                 
                 # Save overlay
                 overlay = image.copy()
-                binary_mask = (mask > 0.5).astype(np.bool)
+                binary_mask = (mask > 0.5)
                 overlay[binary_mask, 1] = 255  # Green channel
                 overlay_path = output_dir / f"{input_path.stem}_overlay.png"
                 cv2.imwrite(str(overlay_path), cv2.cvtColor(overlay, cv2.COLOR_RGB2BGR))

@@ -106,7 +106,7 @@ if __name__ == '__main__':
     # Create Gradio interface
     demo = gr.Interface(
         fn=gradio_interface,
-        inputs=gr.Image(type="numpy", label="Input Image", shape=(720, 720)),
+        inputs=gr.Image(type="numpy", label="Input Image"),
         outputs=[
             gr.Image(type="numpy", label="Original"),
             gr.Image(type="numpy", label="Lane Mask"),

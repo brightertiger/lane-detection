@@ -33,7 +33,7 @@ class SegmentationModel(nn.Module):
     def from_pretrained(cls, checkpoint_path: str, device: str = 'cuda'):
         """Load model from a checkpoint."""
         try:
-            checkpoint = torch.load(checkpoint_path, map_location=device)
+            checkpoint = torch.load(checkpoint_path, map_location=device, weights_only=False)
             model = cls()
             model.load_state_dict(checkpoint['model_state_dict'])
             return model

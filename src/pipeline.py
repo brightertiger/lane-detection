@@ -81,8 +81,7 @@ class SegmentationPipeline:
             self.optimizer,
             mode='min',
             factor=0.5,
-            patience=5,
-            verbose=True
+            patience=5
         )
         
         logger.info("Model, loss function, and optimizer have been set up.")
@@ -181,7 +180,7 @@ class SegmentationPipeline:
         if self.model is None:
             self.setup()
         
-        checkpoint = torch.load(checkpoint_path, map_location=self.device)
+        checkpoint = torch.load(checkpoint_path, map_location=self.device, weights_only=False)
         self.model.load_state_dict(checkpoint['model_state_dict'])
         self.model.eval()
         

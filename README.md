@@ -30,6 +30,9 @@ This repository contains code to train a Resnet34-backbone-based U-Net model for
 │   ├── pipeline.py              # End-to-end pipeline for training and inference
 │   └── config.py                # Configuration utilities
 
+├── source                    # BACKWARD COMPATIBILITY ALIASES
+│   └── *.py                     # Wrapper modules for notebook compatibility
+
 ├── notebooks                 # JUPYTER NOTEBOOKS
 │   ├── 01-data.ipynb             # Data Preprocessing
 │   ├── 02-transform.ipynb        # Data Augmentation
@@ -170,16 +173,22 @@ The improved Gradio interface now provides three outputs:
 
 Major dependencies include:
 
-- torch
-- torchvision
-- numpy
-- pandas
-- opencv-python
-- albumentations
-- segmentation-models-pytorch
-- gradio
-- matplotlib
-- PyYAML
+- torch>=2.0.0
+- torchvision>=0.15.0
+- numpy>=1.24.0
+- pandas>=2.0.0
+- opencv-python>=4.8.0
+- albumentations>=1.3.0
+- segmentation-models-pytorch>=0.3.0
+- gradio>=4.0.0
+- matplotlib>=3.7.0
+- PyYAML>=6.0
 
 See `requirements.txt` for the complete list with version specifications.
+
+Install dependencies:
+
+```bash
+pip install -r requirements.txt
+```
 
